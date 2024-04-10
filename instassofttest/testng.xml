@@ -1,2 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"><suite name="All Test Suite"><test verbose="2" preserve-order="true" name="/Users/christianlindo/Desktop/SoftwareTesting/instassofttest"><classes/></test></suite>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="/Users/christianlindo/Desktop/SoftwareTesting/instassofttest">
+        <classes>
+            <class name = "SignIn"></class>
+            <class name = "AccountInfo"></class>
+            <class name = "AccountInteraction"></class>
+            <class name = "Like"></class>
+            <class name = "Comment"></class>
+            <class name = "Unfollow"></class>
+            <class name = "DirMes"></class>
+            <class name = "SignOut"></class>
+        </classes>
+    </test>
+</suite>

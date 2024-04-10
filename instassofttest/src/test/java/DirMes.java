@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class AccountInteraction{
+public class DirMes{
 
     private WebDriver driver;
 
@@ -57,32 +57,31 @@ public class AccountInteraction{
     }
 
     @Test (priority = 2)
-    public static void searchTab(WebDriver driver) throws InterruptedException{
+    public static void dmTab(WebDriver driver) throws InterruptedException{
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // adds a wait variable
-        WebElement SearchBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div/div[2]/span/div/a/div")));
+        WebElement dmBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div/div[5]/div/div/div/span/div/a/div/div/div/div/svg/path[1]")));
 
-        //WebElement SearchBtn = driver.findElement(By.xpath("")); // finds login button
-        SearchBtn.click(); //selects explore button
-        Thread.sleep(5000); // 5 second buffer to allow to show explore page
+        dmBtn.click(); //selects dm button
+        Thread.sleep(5000); // 5 second buffer to allow to show dm page
 
     }
 
     @Test (priority = 3)
-    public static void searchAcc(WebDriver driver) throws InterruptedException{
+    public static void sendDM(WebDriver driver) throws InterruptedException{
 
-        WebElement SearchBar = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div[1]/div/div/div/div/div")); // finds login button
-        SearchBar.sendKeys("microsoft");
+        WebElement createDM = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/div/div/div/div[1]/div/div[2]/div/div/div/div[4]/div"));
+        createDM.click();
         Thread.sleep(2000); // 2 second buffer to show results
 
-        WebElement Account = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div[1]/div/div/div/div/div[3]/div/div/div/div/div/div/a[1]/div[1]/div/div/div[2]/div/div "));
+        WebElement Account = driver.findElement(By.xpath(""));
         Account.click();
         Thread.sleep(2000); // 2 second buffer to show account
 
     }
 
     @Test (priority = 4)
-    public static void follow(WebDriver driver) throws InterruptedException{
+    public static void deleteDM(WebDriver driver) throws InterruptedException{
 
         WebElement followBtn = driver.findElement(By.linkText("Follow"));
         followBtn.click();
