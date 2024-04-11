@@ -49,13 +49,14 @@ public class Unfollow {
 
 
         //Select list of followed
-        WebElement SelectFollowing = wait.until(ExpectedConditions.elementToBeClickable(By.name("following")));
+        WebElement SelectFollowing = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[3]/a")));
         SelectFollowing.click();
         Thread.sleep(20000);
 
         //Select Follow button next to first account name
-        driver1.findElement(By.xpath("//*[@id=\'mount_0_0_Hd\']/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[3]/a")).click();
-        Thread.sleep(5000);
+        WebElement SpecificFollow = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[7]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[4]/div[1]/div/div[1]/div/div/div/div[3]/div/button")));
+        SpecificFollow.click();
+        Thread.sleep(20000);
 
         //Unfollow the account
         driver1.findElement(By.xpath("/html/body/div[7]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[4]/div[1]/div/div[1]/div/div/div/div[3]/div/button/div/div")).click();
