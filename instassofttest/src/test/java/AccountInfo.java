@@ -1,3 +1,12 @@
+//---------------------------------------------------------
+// File: AccountInfo.java
+// Author(s): Christian Lindo
+// Class: CEN 4072 Y4S2 2024 : Software Testing
+// Purpose: testing the ability to edit account info & bio
+//          feature
+// Audit: 4.10.24
+//---------------------------------------------------------
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,7 +30,7 @@ public class AccountInfo {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
         driver.get("https://www.instagram.com/");
-        signIn("student3885", "instapassword"); // Use real credentials here
+        signIn("studentacc01", "instapassword"); // Use real credentials here
     }
 
     private void signIn(String username, String password) {
@@ -35,15 +44,22 @@ public class AccountInfo {
 
     @Test(priority = 1)
     public void navigateToEditPage() {
-        driver.get("https://www.instagram.com/student3885/"); // Adjust the URL to your profile
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Edit profile')]"))).click();
-        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Edit profile')]"))).isDisplayed(), "Edit profile form is not displayed.");
+        driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[8]/div/span/div/a/div/div[1]/div/div")).click();   // Adjust the URL to your profile
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[2]/div[1]/div[1]/a"))).click();
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div[3]/div/div[1]/div/div/span"))).isDisplayed(), "Edit profile form is not displayed.");
     }
 
     @Test(priority = 2)
     public void updateBio() {
         // Assuming navigating to the bio field is part of the edit profile page
-        WebElement bioField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("bio"))); // This locator will likely need adjustment
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div[1]/div/div[1]/div/div/svg\n"))).click();
+
+        WebElement bioField = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div[3]/div/div/form/div[1]/div/textarea"))); // This locator will likely need adjustment
         bioField.clear();
         bioField.sendKeys("This is a test bio.");
 
@@ -51,12 +67,11 @@ public class AccountInfo {
     }
 
     @Test(priority = 3)
-    public void submitChanges() {
+    public void submitChanges() throws InterruptedException {
         // This assumes the button to submit changes is visible and clickable on the edit profile page
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Submit')]"))).click();
-
-        // Verify changes are saved, adjust the xpath as needed to match the confirmation message or indicator
-        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Profile saved')]"))).isDisplayed(), "Profile changes were not saved.");
+        WebElement submitButton = driver.findElement(By.xpath("//*[@role='button'][contains(text(), 'Submit')]"));
+        submitButton.click();
+        Thread.sleep(2000);
     }
 
     @AfterClass

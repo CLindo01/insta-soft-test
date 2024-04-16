@@ -1,4 +1,10 @@
-//This class if for testing the account search feature and the following feature
+//---------------------------------------------------------
+// File: DirMes.java
+// Author(s): Alyssa Chiego
+// Class: CEN 4072 Y4S2 2024 : Software Testing
+// Purpose: testing the account direct message feature
+// Audit: 4.10.24
+//---------------------------------------------------------
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,85 +18,67 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class DirMes{
+public class DirMes {
 
     private WebDriver driver;
+    private WebDriverWait wait;
 
     @BeforeClass
     public void setup() {
-        // Initialize the WebDriver and sign into the account
         System.setProperty("webdriver.chrome.driver", "/Users/christianlindo/Desktop/SoftwareTesting/chromedriver");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get("https://www.instagram.com/");
-
-        // Sign-in process
-        signIn("student3885", "instapassword"); // Replace with your credentials
+        signIn("studentacc01", "instapassword"); // Replace with your credentials
     }
 
     private void signIn(String username, String password) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Username
-        WebElement usernameInput = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
-        usernameInput.sendKeys(username);
-
-        // Password
-        WebElement passwordInput = wait.until(ExpectedConditions.elementToBeClickable(By.name("password")));
-        passwordInput.sendKeys(password);
-
-        // Login button
+        wait.until(ExpectedConditions.elementToBeClickable(By.name("username"))).sendKeys(username);
+        wait.until(ExpectedConditions.elementToBeClickable(By.name("password"))).sendKeys(password);
         WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
         loginButton.click();
-
-        // Wait for navigation to profile or home page as a sign of successful login
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Save your login info?')]"))); // Adjust this locator
     }
 
     @Test(priority = 1)
-    public static void webpage(WebDriver driver) {
-
-        // Navigate to the webpage
-        String Instagram = "https://www.instagram.com/";
-        driver.get(Instagram);
-
+    public void dmTab() {
+        driver.findElement(By.linkText("Messages")).click();
     }
 
-    @Test (priority = 2)
-    public static void dmTab(WebDriver driver) throws InterruptedException{
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // adds a wait variable
-        WebElement dmBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div/div[5]/div/div/div/span/div/a/div/div/div/div/svg/path[1]")));
-
-        dmBtn.click(); //selects dm button
-        Thread.sleep(5000); // 5 second buffer to allow to show dm page
-
-    }
-
-    @Test (priority = 3)
-    public static void sendDM(WebDriver driver) throws InterruptedException{
-
-        WebElement createDM = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/div/div/div/div[1]/div/div[2]/div/div/div/div[4]/div"));
+    @Test(priority = 2)
+    public void createDM() throws InterruptedException {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        WebElement closeit = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]\n")));
+        closeit.click();
+        WebElement createDM = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/div/div/div/div[1]/div/div[1]/div/div[1]/div[2]/div")));
         createDM.click();
-        Thread.sleep(2000); // 2 second buffer to show results
 
-        WebElement Account = driver.findElement(By.xpath(""));
-        Account.click();
-        Thread.sleep(2000); // 2 second buffer to show account
-
+        WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[1]/div/div[2]/div/div[2]/input")));
+        searchBox.sendKeys("belles.mccurdy");
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[1]/div/div[3]/div/div/div/div[1]/div/div/div[3]/div/label/div/input"))).click();
+        WebElement chat = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[1]/div/div[4]/div")));
+        chat.click();
+        Thread.sleep(1000);
     }
 
-    @Test (priority = 4)
-    public static void deleteDM(WebDriver driver) throws InterruptedException{
+    @Test(priority = 3)
+    public void sendDM() throws InterruptedException {
+        WebElement messageBox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/div/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div[1]/p")));
+        messageBox.sendKeys("Hi! (if you see me, I worked!)");
+        Thread.sleep(1000);
 
-        WebElement followBtn = driver.findElement(By.linkText("Follow"));
-        followBtn.click();
-
+        WebElement sendButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/div/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/div/div/div[2]/div/div/div[3]")));
+        sendButton.click();
+        Thread.sleep(1000);
     }
 
     @AfterClass
     public void tearDown() {
         driver.quit();
     }
-
 }

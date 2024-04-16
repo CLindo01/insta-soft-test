@@ -1,97 +1,78 @@
-//This class if for testing the account search feature and the following feature
-
+//---------------------------------------------------------
+// File: AccountInteraction.java
+// Author(s): Alyssa Chiego
+// Class: CEN 4072 Y4S2 2024 : Software Testing
+// Purpose: Testing the account search & follow feature on Instagram
+// Audit: 4.10.24
+//---------------------------------------------------------
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
-public class AccountInteraction{
+public class AccountInteraction {
 
     private WebDriver driver;
+    private WebDriverWait wait;
 
     @BeforeClass
     public void setup() {
-        // Initialize the WebDriver and sign into the account
         System.setProperty("webdriver.chrome.driver", "/Users/christianlindo/Desktop/SoftwareTesting/chromedriver");
         driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
         driver.get("https://www.instagram.com/");
-
-        // Sign-in process
-        signIn("student3885", "instapassword"); // Replace with your credentials
+        signIn("studentacc01", "instapassword"); // Replace with real credentials
     }
 
     private void signIn(String username, String password) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(By.name("username"))).sendKeys(username);
+        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
 
-        // Username
-        WebElement usernameInput = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
-        usernameInput.sendKeys(username);
-
-        // Password
-        WebElement passwordInput = wait.until(ExpectedConditions.elementToBeClickable(By.name("password")));
-        passwordInput.sendKeys(password);
-
-        // Login button
-        WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
-        loginButton.click();
-
-        // Wait for navigation to profile or home page as a sign of successful login
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Save your login info?')]"))); // Adjust this locator
+        // Adjust this wait to the specific element that indicates a successful login
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Save your login info?')]")));
     }
 
     @Test(priority = 1)
-    public static void webpage(WebDriver driver) {
-
-        // Navigate to the webpage
-        String Instagram = "https://www.instagram.com/";
-        driver.get(Instagram);
-
+    public void searchTab() throws InterruptedException {
+        // Assuming the XPath is correct, but this is very fragile. Consider using more stable selectors.
+        driver.findElement(By.linkText("Search")).click();
+        Thread.sleep(1000); // Consider using WebDriverWait instead of Thread.sleep
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/div/input"))).click();
     }
 
-    @Test (priority = 2)
-    public static void searchTab(WebDriver driver) throws InterruptedException{
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // adds a wait variable
-        WebElement SearchBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div/div/div/div[2]/span/div/a/div")));
-
-        //WebElement SearchBtn = driver.findElement(By.xpath("")); // finds login button
-        SearchBtn.click(); //selects explore button
-        Thread.sleep(5000); // 5 second buffer to allow to show explore page
-
+    @Test(priority = 2)
+    public void searchAndFollowAccount() throws InterruptedException {
+        searchAcc();
+        follow();
     }
 
-    @Test (priority = 3)
-    public static void searchAcc(WebDriver driver) throws InterruptedException{
+    private void searchAcc() throws InterruptedException {
+        // Assumes finding the search input and entering a search term
+        WebElement searchBar = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/div/input"));
+        searchBar.sendKeys("instagram");
+        Thread.sleep(2000); // Consider using WebDriverWait instead of Thread.sleep
 
-        WebElement SearchBar = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div[1]/div/div/div/div/div")); // finds login button
-        SearchBar.sendKeys("microsoft");
-        Thread.sleep(2000); // 2 second buffer to show results
-
-        WebElement Account = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/section/main/div/div[1]/div/div/div/div/div[3]/div/div/div/div/div/div/a[1]/div[1]/div/div/div[2]/div/div "));
-        Account.click();
-        Thread.sleep(2000); // 2 second buffer to show account
-
+        WebElement account = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/a[1]/div[1]/div/div/div[2]/div/div"));
+        account.click();
+        Thread.sleep(2000); // Consider using WebDriverWait instead of Thread.sleep
     }
 
-    @Test (priority = 4)
-    public static void follow(WebDriver driver) throws InterruptedException{
-
-        WebElement followBtn = driver.findElement(By.linkText("Follow"));
-        followBtn.click();
-
+    private void follow() throws InterruptedException {
+        WebElement followBtn = driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/div[2]/div/div[1]/button/div/div"));
+        followBtn.click(); // Follow the account
+        Thread.sleep(3000); // Consider using WebDriverWait instead of Thread.sleep
     }
 
     @AfterClass
     public void tearDown() {
         driver.quit();
     }
-
 }

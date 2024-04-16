@@ -42,7 +42,7 @@ public class SignIn {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // adds a wait variable
         WebElement UsernameTB = wait.until(ExpectedConditions.elementToBeClickable(By.name("username"))); //wait until username box is found
-        UsernameTB.sendKeys("student3885"); //enters in email
+        UsernameTB.sendKeys("studentacc01"); //enters in email
         Thread.sleep(1000); // time buffer
 
     }
