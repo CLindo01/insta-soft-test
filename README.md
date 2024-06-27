@@ -1,1 +1,1 @@
-Collaborators: Christian Linfo, Alyssa Chiego, Richardson Jacques
+Collaborators: Christian Lindo, Alyssa Chiego, Richardson Jacques
